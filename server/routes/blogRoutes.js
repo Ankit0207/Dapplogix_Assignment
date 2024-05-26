@@ -10,6 +10,6 @@ blogRoute
     .get(getBlogById)
     .patch(authMiddleware, updateBlog)
     .delete(authMiddleware, deleteBlog);
-blogRoute.route('/:id/like').put(authMiddleware, likeBlog);
+blogRoute.route('/like/:id').put(authMiddleware, likeBlog);
 
 module.exports = { blogRoute };
