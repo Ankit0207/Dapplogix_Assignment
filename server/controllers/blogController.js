@@ -40,15 +40,14 @@ const getBlog = async (req, res) => {
 
 const getBlogByUser = async (req, res) => {
     const { page, limit, q } = req.query;
-    const userId=req.userId;
+    const userId = req.userId;
     try {
         const query = q
             ? {
-                userId,
                 $or: [
                     { title: { $regex: q, $options: 'i' } },
                     { content: { $regex: q, $options: 'i' } }
-                ]
+                ], userId
             }
             : { userId };
         const blogs = await BlogModel.find(query)
@@ -126,4 +125,4 @@ const likeBlog = async (req, res) => {
     }
 };
 
-module.exports = { createBlog, getBlog, getBlogById, updateBlog, deleteBlog, likeBlog ,getBlogByUser};
+module.exports = { createBlog, getBlog, getBlogById, updateBlog, deleteBlog, likeBlog, getBlogByUser };
