@@ -126,4 +126,4 @@ const likeBlog = async (req, res) => {
     }
 };
 
-module.exports = { createBlog, getBlog, getBlogById, updateBlog, deleteBlog, likeBlog };
+module.exports = { createBlog, getBlog, getBlogById, updateBlog, deleteBlog, likeBlog ,getBlogByUser};
