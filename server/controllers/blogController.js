@@ -38,6 +38,29 @@ const getBlog = async (req, res) => {
     }
 };
 
+const getBlogByUser = async (req, res) => {
+    const { page, limit, q } = req.query;
+    const userId=req.userId;
+    try {
+        const query = q
+            ? {
+                userId,
+                $or: [
+                    { title: { $regex: q, $options: 'i' } },
+                    { content: { $regex: q, $options: 'i' } }
+                ]
+            }
+            : { userId };
+        const blogs = await BlogModel.find(query)
+            .skip((page - 1) * limit)
+            .limit(parseInt(limit));
+        const total = await BlogModel.countDocuments(query);
+        return res.status(200).json({ blogs, total });
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+};
+
 const getBlogById = async (req, res) => {
     try {
         const blog = await BlogModel.findById(req.params.id);

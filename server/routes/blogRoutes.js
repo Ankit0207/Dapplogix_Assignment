@@ -3,7 +3,7 @@ const { getBlog, createBlog, getBlogById, updateBlog, deleteBlog, likeBlog } = r
 const { authMiddleware } = require('../middleware/authMiddleware');
 const blogRoute = express.Router();
 
-blogRoute.route('/').get(getBlog).post(authMiddleware, createBlog);
+blogRoute.route('/').get(getBlog).get(authMiddleware,).post(authMiddleware, createBlog);
 blogRoute
     .route('/:id')
     .get(getBlogById)
