@@ -6,6 +6,6 @@ const commentRoute = express.Router();
 
 commentRoute.route('/').post(authMiddleware, createComment);
 commentRoute.route('/:id').put(authMiddleware, updateComment).delete(authMiddleware, deleteComment);
-commentRoute.route('/post/:id').get(getCommentsByPostId);
+commentRoute.route('/blog/:id').get(getCommentsByPostId);
 
 module.exports = { commentRoute };
