@@ -40,16 +40,15 @@ const getBlog = async (req, res) => {
 
 const getBlogByUser = async (req, res) => {
     const { page, limit, q } = req.query;
-    const userId = req.userId;
     try {
         const query = q
             ? {
                 $or: [
                     { title: { $regex: q, $options: 'i' } },
                     { content: { $regex: q, $options: 'i' } }
-                ], userId
+                ],authorId:req.userId
             }
-            : { userId };
+            : { authorId:req.userId };
         const blogs = await BlogModel.find(query)
             .skip((page - 1) * limit)
             .limit(parseInt(limit));
