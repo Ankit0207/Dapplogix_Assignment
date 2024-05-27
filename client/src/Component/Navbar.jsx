@@ -43,7 +43,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   }
 }));
 
-function Navbar({handleTrigger}) {
+function Navbar({ handleTrigger }) {
 
 
   const navigate = useNavigate();
@@ -54,11 +54,11 @@ function Navbar({handleTrigger}) {
   const initialSearch = searchParams.get("q");
   const [searchBar, setSearchBar] = useState(initialSearch || "");
 
-  useEffect(()=>{
-    let params={}
-    searchBar&&(params.q=searchBar)
+  useEffect(() => {
+    let params = {}
+    searchBar && (params.q = searchBar)
     setSearchParams(params);
-  },[searchBar])
+  }, [searchBar])
 
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
@@ -68,10 +68,13 @@ function Navbar({handleTrigger}) {
   };
   const handleLogout = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("userId");
+    localStorage.removeItem("username");
     navigate("/signin")
   }
 
   const token = localStorage.getItem("token");
+  const username=localStorage.getItem("username");
 
   return (
     <AppBar position="static">
@@ -104,11 +107,13 @@ function Navbar({handleTrigger}) {
               />
             </Search>
           </Box>
-          <CreateBlogModal handleTrigger={handleTrigger}/>
+          <CreateBlogModal handleTrigger={handleTrigger} />
           <Box>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" />
+                <Avatar sx={{color:"#138ef2"}} alt="Remy Sharp" >
+                  {username[0].toUpperCase()}
+                </Avatar>
               </IconButton>
             </Tooltip>
             {token ? <Menu

@@ -21,13 +21,13 @@ const ExpandMore = styled((props) => {
     }),
 }));
 
-export default function CardComponent({ data }) {
+export default function CardComponent({ data ,handleTrigger}) {
     const [expandedComments, setExpandedComments] = React.useState(false);
     const [expandedAddComments, setAddExpandedComments] = React.useState(false);
-    const [liked, setLiked] = React.useState(false);
     const [newComment, setNewComment] = React.useState('');
     const dispatch = useDispatch();
     const token = localStorage.getItem("token")
+    const userId=localStorage.getItem("userId");
     const comments = useSelector((store) => store.commentReducer.comments)
 
     const handleExpandComment = () => {
@@ -39,11 +39,11 @@ export default function CardComponent({ data }) {
 
     const handleLikeClick = () => {
         axios.put(`https://blog-website-54v1.onrender.com/blogs/like/${data?._id}`, {}, { headers: { Authorization: `Bearer ${token}` } }).then((res) => {
-            setLiked(!liked);
-            console.log(res)
+            handleTrigger();
         }).catch((error) => {
             console.log(error)
         })
+        
     };
 
     const handlePostComment = (e) => {
@@ -82,7 +82,7 @@ export default function CardComponent({ data }) {
             <CardActions disableSpacing>
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '11%' }}>
                     <IconButton aria-label="like" onClick={handleLikeClick}>
-                        <FavoriteIcon sx={{ color: liked ? red[500] : 'inherit' }} /> <Typography sx={{ ml: "4px", fontWeight: 600 }}> {data?.likes.length}</Typography>
+                        <FavoriteIcon sx={{ color: data.likes.includes(userId) ? red[500] : 'inherit' }} /> <Typography sx={{ ml: "4px", fontWeight: 600 }}> {data?.likes.length}</Typography>
                     </IconButton>
                     <ExpandMore
                         expand={expandedAddComments}

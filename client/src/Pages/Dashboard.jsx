@@ -15,6 +15,8 @@ const Dashboard = () => {
     const [page, setPage] = useState(1);
     const totalBlogs = useSelector((store) => store.blogReducer.totalBlogs);
     const blogs = useSelector((store) => store.blogReducer.blogs);
+    const token = localStorage.getItem("token");
+    const userId=localStorage.getItem("userId");
 
     const handleTrigger = () => {
         setTrigger( trigger + 1)
@@ -37,7 +39,7 @@ const Dashboard = () => {
 
             <Container sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                 {blogs.map((el, i) => {
-                    return <CardComponent key={el?._id} data={el} />
+                    return <CardComponent key={el?._id} data={el} handleTrigger={handleTrigger}/>
                 })}
             </Container>
 
