@@ -23,7 +23,6 @@ const getComments = async (req, res) => {
 };
 
 const updateComment = async (req, res) => {
-    const { comment } = req.body;
     try {
         const existingComment = await CommentModel.findById(req.params.id);
         if (!existingComment) {
