@@ -43,7 +43,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   }
 }));
 
-function Navbar({ handleTrigger }) {
+function Navbar({ handleTrigger,section }) {
 
 
   const navigate = useNavigate();
@@ -133,9 +133,9 @@ function Navbar({ handleTrigger }) {
               onClose={handleCloseUserMenu}
             >
               <MenuItem onClick={handleCloseUserMenu}>
-                <Typography textAlign="center" sx={{ textDecoration: 'none', color: 'black' }} onClick={() => { navigate("/userblog") }}>My Blog</Typography>
+                <Typography textAlign="center" sx={{ textDecoration: 'none', color: 'black' }} onClick={() => {section==="My Blog"?navigate("/userblog"):navigate("/") }}>{section}</Typography>
               </MenuItem>
-              <MenuItem onClick={handleCloseUserMenu}><Typography textAlign="center" sx={{ textDecoration: 'none', color: 'black' }}>profile</Typography>
+              <MenuItem onClick={handleCloseUserMenu}><Typography textAlign="center" sx={{ textDecoration: 'none', color: 'black' }}>Profile</Typography>
               </MenuItem>
               <MenuItem onClick={handleCloseUserMenu}> <Typography textAlign="center" sx={{ textDecoration: 'none', color: 'black' }} onClick={handleLogout}>Logout</Typography>
               </MenuItem></Menu> :

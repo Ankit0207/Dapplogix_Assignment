@@ -9,6 +9,7 @@ import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import { addComment, getComments } from '../Redux/Comments/action';
+import CommentComponent from './Comment';
 
 const ExpandMore = styled((props) => {
     const { expand, ...other } = props;
@@ -21,13 +22,15 @@ const ExpandMore = styled((props) => {
     }),
 }));
 
-export default function CardComponent({ data ,handleTrigger}) {
+export default function CardComponent({ data, handleTrigger }) {
     const [expandedComments, setExpandedComments] = React.useState(false);
     const [expandedAddComments, setAddExpandedComments] = React.useState(false);
     const [newComment, setNewComment] = React.useState('');
+    const [commentTrigger, setCommentTrigger] = React.useState(0);
     const dispatch = useDispatch();
-    const token = localStorage.getItem("token")
-    const userId=localStorage.getItem("userId");
+    const token = localStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+    const username = localStorage.getItem("username");
     const comments = useSelector((store) => store.commentReducer.comments)
 
     const handleExpandComment = () => {
@@ -36,27 +39,35 @@ export default function CardComponent({ data ,handleTrigger}) {
     const handleAddExpandComment = () => {
         setAddExpandedComments(!expandedAddComments);
     };
+    const handleCommentTrigger = () => {
+        setCommentTrigger(commentTrigger + 1)
+    }
 
     const handleLikeClick = () => {
-        axios.put(`https://blog-website-54v1.onrender.com/blogs/like/${data?._id}`, {}, { headers: { Authorization: `Bearer ${token}` } }).then((res) => {
+        axios.put(`https://blog-website-7e2f.onrender.com/blogs/like/${data?._id}`, {}, { headers: { Authorization: `Bearer ${token}` } }).then((res) => {
             handleTrigger();
         }).catch((error) => {
             console.log(error)
         })
-        
+
     };
 
-    const handlePostComment = (e) => {
-        e.preventDefault();
-        dispatch(addComment({ postId: data?._id, comment: newComment }, token));
-        setAddExpandedComments(false);
-        setExpandedComments(true);
-        setNewComment("");
+    const handlePostComment = () => {
+        dispatch(addComment({ postId: data?._id, comment: newComment, userName: username }, token)).then(() => {
+            setAddExpandedComments(false);
+            handleCommentTrigger();
+            setExpandedComments(true);
+            setNewComment("");
+        })
+
     }
 
+    const filteredComments = comments.filter(comment => comment.postId === data._id);
+
+
     React.useEffect(() => {
-        dispatch(getComments(data?._id))
-    }, [])
+        dispatch(getComments())
+    }, [commentTrigger])
 
     return (
 
@@ -106,12 +117,8 @@ export default function CardComponent({ data ,handleTrigger}) {
             <Collapse in={expandedComments} timeout="auto" unmountOnExit>
                 <CardContent sx={{ maxHeight: '200px', overflowY: 'auto' }}>
                     <Stack spacing={2}>
-                            {comments.map((comment, index) => (
-                                <Typography key={comment?._id} paragraph>
-                                    {comment.comment}
-                                </Typography>
-                            ))}
-                        </Stack>
+                        {filteredComments.length>0 ? filteredComments.map((comment) => <CommentComponent key={comment._id} comment={comment} handleCommentTrigger={handleCommentTrigger} />) : <Typography>No Comments</Typography>}
+                    </Stack>
                 </CardContent>
             </Collapse>
             <Collapse in={expandedAddComments} timeout="auto" unmountOnExit>

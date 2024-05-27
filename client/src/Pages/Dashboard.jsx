@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Navbar from '../Component/Navbar'
 import CardComponent from '../Component/Card'
-import { Box, Container } from '@mui/material'
+import { Box, Container, Typography } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
 import { getBlogs } from '../Redux/Blogs/action'
 import { useSearchParams } from 'react-router-dom'
@@ -12,35 +12,31 @@ const Dashboard = () => {
     const dispatch = useDispatch();
     const [searchParams, setSearchParams] = useSearchParams();
     const [trigger, setTrigger] = useState(0);
-    const [page, setPage] = useState(1);
-    const totalBlogs = useSelector((store) => store.blogReducer.totalBlogs);
     const blogs = useSelector((store) => store.blogReducer.blogs);
-    const token = localStorage.getItem("token");
-    const userId=localStorage.getItem("userId");
 
     const handleTrigger = () => {
-        setTrigger( trigger + 1)
+        setTrigger(trigger + 1)
     }
 
     let params = {
-        limit: 10,
-        page,
         q: searchParams.get("q")
     }
 
 
     useEffect(() => {
         dispatch(getBlogs(params));
-    }, [searchParams,trigger])
+    }, [searchParams, trigger])
 
     return (
         <Box>
-            <Navbar handleTrigger={handleTrigger}/>
+            <Navbar handleTrigger={handleTrigger} section={"My Blog"} />
 
             <Container sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                {blogs.map((el, i) => {
-                    return <CardComponent key={el?._id} data={el} handleTrigger={handleTrigger}/>
-                })}
+                {blogs.length > 0 ? blogs.map((el, i) => {
+                    return <CardComponent key={el?._id} data={el} handleTrigger={handleTrigger} />
+                }) : <Typography>
+                    No Blogs
+                </Typography>}
             </Container>
 
         </Box>

@@ -43,7 +43,7 @@ const EditModal = ({ id, handleTrigger }) => {
     };
 
     useEffect(() => {
-        axios.get(`https://blog-website-54v1.onrender.com/blogs/${id}`).then((res) => {
+        axios.get(`https://blog-website-7e2f.onrender.com/blogs/${id}`).then((res) => {
             setBlogData(res.data)
         }).catch((err) => {
             console.log(err)

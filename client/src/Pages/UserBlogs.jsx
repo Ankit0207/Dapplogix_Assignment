@@ -1,4 +1,4 @@
-import { Box, Button, Container } from '@mui/material'
+import { Box, Button, Container, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import Navbar from '../Component/Navbar'
 import CardComponent from '../Component/Card'
@@ -8,47 +8,46 @@ import { deleteBlog, getUserBlogs } from '../Redux/Blogs/action'
 import EditModal from '../Component/EditModal'
 import DeleteModal from '../Component/DeleteModal'
 
+
 const UserBlogs = () => {
   const dispatch = useDispatch();
   const [searchParams] = useSearchParams();
-  const [page, setPage] = useState(1);
   const [trigger, setTrigger] = useState(0);
-  const totalBlogs = useSelector((store) => store.blogReducer.totalBlogs);
   const userBlogs = useSelector((store) => store.blogReducer.userBlogs);
   const token = localStorage.getItem("token");
 
   let params = {
-    limit: 10,
-    page,
     q: searchParams.get("q")
   }
 
   const handleTrigger = () => {
-    setTrigger(trigger+ 1);
-}
+    setTrigger(trigger + 1);
+  }
 
-useEffect(() => {
-  dispatch(getUserBlogs(params, token));
-}, [searchParams, trigger])
+  useEffect(() => {
+    dispatch(getUserBlogs(params, token));
+  }, [searchParams, trigger])
 
-return (
-  <Box >
-    <Navbar handleTrigger={handleTrigger}/>
+  return (
+    <Box >
+      <Navbar handleTrigger={handleTrigger} section={"Dashboard"}/>
 
-    <Container sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-      {userBlogs.map((el, i) => {
-        return <Box key={el?._id} width={"100%"}>
-          <CardComponent data={el} />
-          <Box sx={{ display: "flex", width: "25%", justifyContent: "space-between" }}>
-            <EditModal id={el?._id} handleTrigger={handleTrigger}/>
-            <DeleteModal id={el?._id} handleTrigger={handleTrigger}/>
+      <Container sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        {userBlogs.length > 0 ? userBlogs.map((el, i) => {
+          return <Box key={el?._id} width={"100%"}>
+            <CardComponent data={el} handleTrigger={handleTrigger} />
+            <Box sx={{ display: "flex", width: "25%", justifyContent: "space-between" }}>
+              <EditModal id={el?._id} handleTrigger={handleTrigger} />
+              <DeleteModal id={el?._id} handleTrigger={handleTrigger} />
+            </Box>
           </Box>
-        </Box>
-      })}
-    </Container >
+        }) : <Typography>
+          No Blogs
+        </Typography>}
+      </Container >
 
-  </Box >
-)
+    </Box >
+  )
 }
 
 export default UserBlogs

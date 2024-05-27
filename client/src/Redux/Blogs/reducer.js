@@ -8,7 +8,6 @@ const initialState = {
   totalBlogs: 0,
   blogs: [],
   userBlogs: [],
-  singleBlog:{}
 };
 
 export const reducer = (state = initialState, { payload, type }) => {
@@ -38,13 +37,6 @@ export const reducer = (state = initialState, { payload, type }) => {
         ...state,
         isLoading: false,
         userBlogs: payload,
-      };
-    }
-    case GET_SINGLE_BLOG_SUCCESS: {
-      return {
-        ...state,
-        isLoading: false,
-        singleBlog: payload,
       };
     }
     case POST_BLOG_SUCCESS: {

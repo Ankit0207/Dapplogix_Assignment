@@ -4,7 +4,7 @@ import { COMMENT_FAILURE, COMMENT_REQUEST, DELETE_COMMENT_SUCCESS, GET_COMMENT_S
 export const addComment = (commentData, token) => async (dispatch) => {
     dispatch({ type: COMMENT_REQUEST });
     return axios
-        .post(`https://blog-website-54v1.onrender.com/comments`, commentData, { headers: { Authorization: `Bearer ${token}` } })
+        .post(`https://blog-website-7e2f.onrender.com/comments`, commentData, { headers: { Authorization: `Bearer ${token}` } })
         .then(() => {
             dispatch({ type: POST_COMMENT_SUCCESS });
         })
@@ -13,10 +13,10 @@ export const addComment = (commentData, token) => async (dispatch) => {
         });
 };
 
-export const getComments = (id) => (dispatch) => {
+export const getComments = () => (dispatch) => {
     dispatch({ type: COMMENT_REQUEST });
     axios
-        .get(`https://blog-website-54v1.onrender.com/comments/blog/${id}`)
+        .get(`https://blog-website-7e2f.onrender.com/comments`)
         .then((res) => {
             dispatch({ type: GET_COMMENT_SUCCESS, payload: res.data.comments });
         })
@@ -26,10 +26,10 @@ export const getComments = (id) => (dispatch) => {
 };
 
 
-export const editComment = (id,comment,token) => (dispatch) => {
+export const editComment = (id, newComment, token) => async (dispatch) => {
     dispatch({ type: COMMENT_REQUEST });
-    axios
-        .put(`https://blog-website-54v1.onrender.com/comments/${id}`,comment,{ headers: { Authorization: `Bearer ${token}` } })
+    return axios
+        .patch(`https://blog-website-7e2f.onrender.com/comments/${id}`, { comment: newComment }, { headers: { Authorization: `Bearer ${token}` } })
         .then(() => {
             dispatch({ type: PATCH_COMMENT_SUCCESS });
         })
@@ -38,10 +38,10 @@ export const editComment = (id,comment,token) => (dispatch) => {
         });
 };
 
-export const deleteBlog = (id,token) => (dispatch) => {
+export const deleteComment = (id, token) => async (dispatch) => {
     dispatch({ type: COMMENT_REQUEST });
-    axios
-        .delete(`https://blog-website-54v1.onrender.com/comments/${id}`,{ headers: { Authorization: `Bearer ${token}` } })
+    return axios
+        .delete(`https://blog-website-7e2f.onrender.com/comments/${id}`, { headers: { Authorization: `Bearer ${token}` } })
         .then(() => {
             dispatch({ type: DELETE_COMMENT_SUCCESS });
         })

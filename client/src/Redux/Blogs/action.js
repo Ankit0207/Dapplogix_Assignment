@@ -4,7 +4,7 @@ import { DELETE_BLOG_SUCCESS, GET_BLOG_SUCCESS, GET_USER_BLOG_SUCCESS, PATCH_BLO
 export const addBlog = (blogData, token) => (dispatch) => {
     dispatch({ type: BLOG_REQUEST });
     return axios
-        .post(`https://blog-website-54v1.onrender.com/blogs`, blogData, { headers: { Authorization: `Bearer ${token}` } })
+        .post(`https://blog-website-7e2f.onrender.com/blogs`, blogData, { headers: { Authorization: `Bearer ${token}` } })
         .then(() => {
             dispatch({ type: POST_BLOG_SUCCESS });
         })
@@ -16,7 +16,7 @@ export const addBlog = (blogData, token) => (dispatch) => {
 export const getBlogs = (paramObj) => (dispatch) => {
     dispatch({ type: BLOG_REQUEST });
     axios
-        .get(`https://blog-website-54v1.onrender.com/blogs`, { params: paramObj })
+        .get(`https://blog-website-7e2f.onrender.com/blogs`, { params: paramObj })
         .then((res) => {
             dispatch({ type: BLOG_TOTAL_SUCCESS, payload: res.data.total })
             dispatch({ type: GET_BLOG_SUCCESS, payload: res.data.blogs });
@@ -28,22 +28,10 @@ export const getBlogs = (paramObj) => (dispatch) => {
 export const getUserBlogs = (paramObj, token) => (dispatch) => {
     dispatch({ type: BLOG_REQUEST });
     axios
-        .get(`https://blog-website-54v1.onrender.com/blogs/user`, { params: paramObj, headers: { Authorization: `Bearer ${token}` } })
+        .get(`https://blog-website-7e2f.onrender.com/blogs/user`, { params: paramObj, headers: { Authorization: `Bearer ${token}` } })
         .then((res) => {
             dispatch({ type: BLOG_TOTAL_SUCCESS, payload: res.data.total })
             dispatch({ type: GET_USER_BLOG_SUCCESS, payload: res.data.blogs });
-        })
-        .catch(() => {
-            dispatch({ type: BLOG_FAILURE });
-        });
-};
-
-export const getSingleBlog = (id) => (dispatch) => {
-    dispatch({ type: BLOG_REQUEST });
-    axios
-        .get(`https://blog-website-54v1.onrender.com/blogs/${id}`)
-        .then(() => {
-            dispatch({ type: GET_SINGLE_BLOG_SUCCESS });
         })
         .catch(() => {
             dispatch({ type: BLOG_FAILURE });
@@ -55,7 +43,7 @@ export const getSingleBlog = (id) => (dispatch) => {
 export const editBlog = (id, blogData, token) => async (dispatch) => {
     dispatch({ type: BLOG_REQUEST });
     return axios
-        .patch(`https://blog-website-54v1.onrender.com/blogs/${id}`, blogData, { headers: { Authorization: `Bearer ${token}` } })
+        .patch(`https://blog-website-7e2f.onrender.com/blogs/${id}`, blogData, { headers: { Authorization: `Bearer ${token}` } })
         .then(() => {
             dispatch({ type: PATCH_BLOG_SUCCESS });
         })
@@ -67,7 +55,7 @@ export const editBlog = (id, blogData, token) => async (dispatch) => {
 export const deleteBlog = (id, token) => (dispatch) => {
     dispatch({ type: BLOG_REQUEST });
     return axios
-        .delete(`https://blog-website-54v1.onrender.com/blogs/${id}`, { headers: { Authorization: `Bearer ${token}` } })
+        .delete(`https://blog-website-7e2f.onrender.com/blogs/${id}`, { headers: { Authorization: `Bearer ${token}` } })
         .then(() => {
             dispatch({ type: DELETE_BLOG_SUCCESS });
         })
@@ -79,7 +67,7 @@ export const deleteBlog = (id, token) => (dispatch) => {
 export const addUser = (userData) => async (dispatch) => {
     dispatch({ type: SIGNUP_LOADING });
     return axios
-        .post(`https://blog-website-54v1.onrender.com/user/register`, userData)
+        .post(`https://blog-website-7e2f.onrender.com/user/register`, userData)
         .then((res) => {
             dispatch({ type: SIGNUP_SUCCESS });
         })
