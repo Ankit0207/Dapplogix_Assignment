@@ -14,9 +14,9 @@ const createComment = async (req, res) => {
     }
 };
 
-const getCommentsByPostId = async (req, res) => {
+const getComments = async (req, res) => {
     try {
-        const comments = await CommentModel.find({ postId: req.params.id });
+        const comments = await CommentModel.find();
         return res.status(200).json({ comments });
     } catch (error) {
         return res.status(500).json({ message: error.message });
