@@ -9,7 +9,6 @@ Fullstack open source blogging application made with MongoDB, Express, React & N
       - [Frontend](#frontend)
       - [Backend](#backend)
       - [Database](#database)
-  * [📸 Screenshots](#screenshots)
   * [Author](#author)
   * [License](#license)
 
@@ -99,18 +98,11 @@ This project was created using the following technologies.
 
 ## Author
 
-- Github: [@Ankit](https://github.com/Muhammet-Yildiz)
-- Linkedin: [@muhammet-yildiz](https://www.linkedin.com/in/muhammet-yıldız-841908224/)
-- Email: [yildiz.m.muhammet@gmail.com](mailto:yildiz.m.muhammet@gmail.com)
+- Github: [@Ankit0207](https://github.com/Ankit0207)
+- Linkedin: [Ankit Choudhary](https://www.linkedin.com/in/ankit-choudhary-b58a9b271/)
 
 ## License
 
 MIT License
 
 Copyright (c) 2022 Ankit Choudhary
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
