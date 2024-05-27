@@ -112,7 +112,7 @@ const likeBlog = async (req, res) => {
         }
         if (blog.likes.includes(req.userId)) {
             blog.likes = blog.likes.filter(
-                (id) => id.toString() !== req.user._id.toString()
+                (id) => id.toString() !== req.userId.toString()
             );
         } else {
             blog.likes.push(req.userId);
