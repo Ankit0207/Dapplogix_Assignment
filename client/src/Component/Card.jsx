@@ -96,28 +96,29 @@ export default function CardComponent({ data, handleTrigger }) {
                         <FavoriteIcon sx={{ color: data.likes.includes(userId) ? red[500] : 'inherit' }} /> <Typography sx={{ ml: "4px", fontWeight: 600 }}> {data?.likes.length}</Typography>
                     </IconButton>
                     <ExpandMore
-                        expand={expandedAddComments}
-                        onClick={handleAddExpandComment}
-                        aria-expanded={expandedAddComments}
-                        aria-label="addComment"
+                        expand={expandedComments}
+                        onClick={handleExpandComment}
+                        aria-expanded={expandedComments}
+                        aria-label="comment"
                     >
-                        <AddCommentIcon />
+                        <CommentIcon />
+                        <Typography sx={{ ml: "4px", fontWeight: 600 }}> {filteredComments.length}</Typography>
                     </ExpandMore>
                 </Box>
                 <ExpandMore
-                    expand={expandedComments}
-                    onClick={handleExpandComment}
-                    aria-expanded={expandedComments}
-                    aria-label="comment"
+                    expand={expandedAddComments}
+                    onClick={handleAddExpandComment}
+                    aria-expanded={expandedAddComments}
+                    aria-label="addComment"
                 >
-                    <CommentIcon />
+                    <AddCommentIcon />
                 </ExpandMore>
             </CardActions>
 
             <Collapse in={expandedComments} timeout="auto" unmountOnExit>
                 <CardContent sx={{ maxHeight: '200px', overflowY: 'auto' }}>
                     <Stack spacing={2}>
-                        {filteredComments.length>0 ? filteredComments.map((comment) => <CommentComponent key={comment._id} comment={comment} handleCommentTrigger={handleCommentTrigger} />) : <Typography>No Comments</Typography>}
+                        {filteredComments.length > 0 ? filteredComments.map((comment) => <CommentComponent key={comment._id} comment={comment} handleCommentTrigger={handleCommentTrigger} />) : <Typography>No Comments</Typography>}
                     </Stack>
                 </CardContent>
             </Collapse>
