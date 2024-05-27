@@ -112,7 +112,7 @@ function Navbar({ handleTrigger }) {
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 <Avatar sx={{color:"#138ef2"}} alt="Remy Sharp" >
-                  {username[0].toUpperCase()}
+                  {username&&username[0].toUpperCase()}
                 </Avatar>
               </IconButton>
             </Tooltip>
