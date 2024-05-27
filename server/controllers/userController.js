@@ -36,7 +36,7 @@ const loginUser = async (req, res) => {
             bcrypt.compare(password, user.password, async (err, result) => {
                 if (result) {
                     const token = jwt.sign({ userId: user._id, userName: user.username }, process.env.JwtSecretKey);
-                    return res.status(200).json({ msg: 'login successful', token });
+                    return res.status(200).json({ msg: 'login successful', token,user });
                 } else {
                     return res.status(401).json({ msg: 'wrong credentials' });
                 }
