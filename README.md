@@ -57,6 +57,7 @@ $ npm run server (to start the backend)
 - User registration and login
 - Authentication using JWT Tokens
 - Blog searching
+- Like the blog
 - CRUD operations (Blog create, read, update and delete)
 - Upload Blog ımages  to the server
 - Commenting  on the Blog
