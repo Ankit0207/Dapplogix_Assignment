@@ -13,9 +13,13 @@ import {
 } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteBlog, editBlog } from '../Redux/Blogs/action';
+import Toast from './Toast';
 
 const DeleteModal = ({ id, handleTrigger }) => {
     const [open, setOpen] = useState(false);
+    const [openToast, setOpenToast] = React.useState(false);
+    const [toastMessage, setToastMessage] = React.useState("");
+    const [severity, setSeverity] = React.useState("");
     const dispatch = useDispatch();
     const isLoading = useSelector((store) => store.blogReducer.isLoading);
     const token = localStorage.getItem("token");
@@ -33,6 +37,9 @@ const DeleteModal = ({ id, handleTrigger }) => {
 
     const handleDeleteBlog = () => {
         dispatch(deleteBlog(id, token)).then(() => {
+            setToastMessage("Blog deleted.")
+            setSeverity("success")
+            setOpenToast(true);
             handleClose();
         })
 
@@ -66,6 +73,7 @@ const DeleteModal = ({ id, handleTrigger }) => {
                     </Button>
                 </DialogActions>
             </Dialog>
+            <Toast open={openToast} msg={toastMessage} severity={severity} setOpenToast={setOpenToast} setToastMessage={setToastMessage} />
         </div>
     );
 };

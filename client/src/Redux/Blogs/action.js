@@ -5,10 +5,11 @@ export const addBlog = (blogData, token) => (dispatch) => {
     dispatch({ type: BLOG_REQUEST });
     return axios
         .post(`https://blog-website-7e2f.onrender.com/blogs`, blogData, { headers: { Authorization: `Bearer ${token}` } })
-        .then(() => {
+        .then((res) => {
             dispatch({ type: POST_BLOG_SUCCESS });
+            return res
         })
-        .catch(() => {
+        .catch((error) => {
             dispatch({ type: BLOG_FAILURE });
         });
 };
@@ -70,6 +71,7 @@ export const addUser = (userData) => async (dispatch) => {
         .post(`https://blog-website-7e2f.onrender.com/user/register`, userData)
         .then((res) => {
             dispatch({ type: SIGNUP_SUCCESS });
+            return res;
         })
         .catch(() => {
             dispatch({ type: SIGNUP_ERROR });

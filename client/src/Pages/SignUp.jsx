@@ -18,9 +18,13 @@ import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { Link,useNavigate } from 'react-router-dom';
 import { useSelector,useDispatch } from 'react-redux';
 import { addUser } from '../Redux/Blogs/action';
+import Toast from '../Component/Toast';
 const SignUp = () => {
     const [userData, setUserData] = useState({ username: "", email: "", password: "" })
     const [showPassword, setShowPassword] = useState(false);
+    const [openToast, setOpenToast] = useState(false);
+    const [toastMessage, setToastMessage] = useState("");
+    const [severity, setSeverity] = useState("");
     const isLoading = useSelector((store) => store.blogReducer.isLoading);
     const navigate=useNavigate();
     const dispatch=useDispatch();
@@ -32,11 +36,31 @@ const SignUp = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        dispatch(addUser(userData)).then(()=>{
-            navigate("/signin")
-        })
-        setUserData({username: "", email: "", password: ""})
+        if (userData.username===""||userData.email === "" || userData.password === "") {
+            setToastMessage("All fields are required to register.")
+            setSeverity("info")
+            setOpenToast(true);
+        } else {
+            dispatch(addUser(userData)).then((res) => {
+                if (res.data.msg === "user registered") {
+                    setUserData({username:"", email: "", password: "" });
+                    setToastMessage("Registration Success! Login to continue.")
+                    setSeverity("success")
+                    setOpenToast(true);
+                    setTimeout(() => {
+                        navigate("/signin")
+                    }, 1000)
+                } else {
+                    setToastMessage("User already exist.")
+                    setSeverity("info")
+                    setOpenToast(true);
+                }
+            }).catch((err) => {
+                console.log(err)
+            })
+        }
     }
+
     return (
         <Box
             sx={{
@@ -122,6 +146,7 @@ const SignUp = () => {
                     </Paper>
                 </Stack>
             </Container>
+            <Toast open={openToast} msg={toastMessage} severity={severity} setOpenToast={setOpenToast} setToastMessage={setToastMessage} />
         </Box>
     )
 }

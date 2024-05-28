@@ -13,10 +13,14 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { editBlog } from '../Redux/Blogs/action';
 import axios from 'axios';
+import Toast from './Toast';
 
 const EditModal = ({ id, handleTrigger }) => {
     const [open, setOpen] = useState(false);
     const [blogData, setBlogData] = useState({ title: "", content: "", image: "" })
+    const [openToast, setOpenToast] = React.useState(false);
+    const [toastMessage, setToastMessage] = React.useState("");
+    const [severity, setSeverity] = React.useState("");
     const dispatch = useDispatch();
     const isLoading = useSelector((store) => store.blogReducer.isLoading);
     const token = localStorage.getItem("token");
@@ -36,10 +40,18 @@ const EditModal = ({ id, handleTrigger }) => {
     }
 
     const handleEditBlog = () => {
-        dispatch(editBlog(id, blogData, token)).then(() => {
-            handleClose();
-        })
-
+        if (blogData.title === "" || blogData.content === "" || blogData.image === "") {
+            setToastMessage("All fields are required.")
+            setSeverity("info")
+            setOpenToast(true);
+        } else {
+            dispatch(editBlog(id, blogData, token)).then(() => {
+                setToastMessage("Blog Edited.")
+                setSeverity("success")
+                setOpenToast(true);
+                handleClose();
+            })
+        }
     };
 
     useEffect(() => {
@@ -111,6 +123,7 @@ const EditModal = ({ id, handleTrigger }) => {
                     </Button>
                 </DialogActions>
             </Dialog>
+            <Toast open={openToast} msg={toastMessage} severity={severity} setOpenToast={setOpenToast} setToastMessage={setToastMessage} />
         </div>
     );
 };

@@ -13,13 +13,17 @@ import {
 import AddIcon from '@mui/icons-material/Add';
 import { useDispatch, useSelector } from 'react-redux';
 import { addBlog } from '../Redux/Blogs/action';
+import Toast from '../Component/Toast';
 
-const CreateBlogModal = ({handleTrigger}) => {
+const CreateBlogModal = ({ handleTrigger }) => {
     const [open, setOpen] = useState(false);
     const [blogData, setBlogData] = useState({ title: "", content: "", image: "" })
+    const [openToast, setOpenToast] = useState(false);
+    const [toastMessage, setToastMessage] = useState("");
+    const [severity, setSeverity] = useState("");
     const dispatch = useDispatch();
     const isLoading = useSelector((store) => store.blogReducer.isLoading);
-    const token=localStorage.getItem("token");
+    const token = localStorage.getItem("token");
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -37,10 +41,29 @@ const CreateBlogModal = ({handleTrigger}) => {
     }
 
     const handleAddBlog = () => {
-        dispatch(addBlog(blogData, token)).then(() => {
+        if (token) {
+            dispatch(addBlog(blogData, token)).then((res) => {
+                if (res.data.msg ===
+                    "Blog posted successfully") {
+                    handleClose();
+                    setToastMessage("Blog posted successfully.")
+                    setSeverity("success")
+                    setOpenToast(true);
+                }else{
+                    setToastMessage("All fields are required.")
+                    setSeverity("info")
+                    setOpenToast(true);
+                }
+            }).catch((err) => {
+                console.log(err)
+            })
+        } else {
             handleClose();
-        })
+            setToastMessage("Sigin to create and post the blog.")
+            setSeverity("info")
+            setOpenToast(true);
 
+        }
     };
 
     return (
@@ -104,6 +127,7 @@ const CreateBlogModal = ({handleTrigger}) => {
                     </Button>
                 </DialogActions>
             </Dialog>
+            <Toast open={openToast} msg={toastMessage} severity={severity} setOpenToast={setOpenToast} setToastMessage={setToastMessage} />
         </div>
     );
 };

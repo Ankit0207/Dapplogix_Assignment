@@ -5,8 +5,9 @@ export const addComment = (commentData, token) => async (dispatch) => {
     dispatch({ type: COMMENT_REQUEST });
     return axios
         .post(`https://blog-website-7e2f.onrender.com/comments`, commentData, { headers: { Authorization: `Bearer ${token}` } })
-        .then(() => {
+        .then((res) => {
             dispatch({ type: POST_COMMENT_SUCCESS });
+            return res
         })
         .catch(() => {
             dispatch({ type: COMMENT_FAILURE });

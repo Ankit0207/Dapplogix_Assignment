@@ -5,11 +5,11 @@ import { red } from '@mui/material/colors';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import CommentIcon from '@mui/icons-material/Comment';
 import AddCommentIcon from '@mui/icons-material/AddComment';
-import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import { addComment, getComments } from '../Redux/Comments/action';
 import CommentComponent from './Comment';
+import Toast from './Toast';
 
 const ExpandMore = styled((props) => {
     const { expand, ...other } = props;
@@ -27,6 +27,9 @@ export default function CardComponent({ data, handleTrigger }) {
     const [expandedAddComments, setAddExpandedComments] = React.useState(false);
     const [newComment, setNewComment] = React.useState('');
     const [commentTrigger, setCommentTrigger] = React.useState(0);
+    const [openToast, setOpenToast] = React.useState(false);
+    const [toastMessage, setToastMessage] = React.useState("");
+    const [severity, setSeverity] = React.useState("");
     const dispatch = useDispatch();
     const token = localStorage.getItem("token");
     const userId = localStorage.getItem("userId");
@@ -44,22 +47,43 @@ export default function CardComponent({ data, handleTrigger }) {
     }
 
     const handleLikeClick = () => {
-        axios.put(`https://blog-website-7e2f.onrender.com/blogs/like/${data?._id}`, {}, { headers: { Authorization: `Bearer ${token}` } }).then((res) => {
-            handleTrigger();
-        }).catch((error) => {
-            console.log(error)
-        })
-
+        if (userId) {
+            axios.put(`https://blog-website-7e2f.onrender.com/blogs/like/${data?._id}`, {}, { headers: { Authorization: `Bearer ${token}` } }).then((res) => {
+                handleTrigger();
+            }).catch((error) => {
+                console.log(error)
+            })
+        } else {
+            setToastMessage("Sigin to use this feature")
+            setSeverity("info")
+            setOpenToast(true)
+        }
     };
 
     const handlePostComment = () => {
-        dispatch(addComment({ postId: data?._id, comment: newComment, userName: username }, token)).then(() => {
+        if (userId) {
+            dispatch(addComment({ postId: data?._id, comment: newComment, userName: username }, token)).then((res) => {
+                if (res.data.msg === "comment added successfully") {
+                    setAddExpandedComments(false);
+                    handleCommentTrigger();
+                    setExpandedComments(true);
+                    setNewComment("");
+                    setToastMessage("Comment Posted")
+                    setSeverity("success")
+                    setOpenToast(true)
+                } else {
+                    setAddExpandedComments(false);
+                    setToastMessage("Comment is required field")
+                    setSeverity("info")
+                    setOpenToast(true);
+                }
+            })
+        } else {
             setAddExpandedComments(false);
-            handleCommentTrigger();
-            setExpandedComments(true);
-            setNewComment("");
-        })
-
+            setToastMessage("Signin to use this feature")
+            setSeverity("info")
+            setOpenToast(true);
+        }
     }
 
     const filteredComments = comments.filter(comment => comment.postId === data._id);
@@ -92,7 +116,7 @@ export default function CardComponent({ data, handleTrigger }) {
             </CardContent>
             <CardActions disableSpacing>
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '11%' }}>
-                    <IconButton aria-label="like" onClick={handleLikeClick}>
+                    <IconButton aria-label="like" onClick={handleLikeClick} >
                         <FavoriteIcon sx={{ color: data.likes.includes(userId) ? red[500] : 'inherit' }} /> <Typography sx={{ ml: "4px", fontWeight: 600 }}> {data?.likes.length}</Typography>
                     </IconButton>
                     <ExpandMore
@@ -138,6 +162,7 @@ export default function CardComponent({ data, handleTrigger }) {
                     </Stack>
                 </CardContent>
             </Collapse>
+            <Toast open={openToast} msg={toastMessage} severity={severity} setOpenToast={setOpenToast} setToastMessage={setToastMessage} />
         </Card>
 
     );

@@ -3,6 +3,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import { AppBar, Box, Toolbar, IconButton, Typography, Menu, Container, Avatar, Tooltip, MenuItem, InputBase, alpha, styled } from '@mui/material';
 import CreateBlogModal from '../Pages/CreateBlog';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import Toast from './Toast';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -43,16 +44,20 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   }
 }));
 
-function Navbar({ handleTrigger,section }) {
+function Navbar({ handleTrigger, section }) {
 
 
   const navigate = useNavigate();
 
   const [anchorElUser, setAnchorElUser] = useState(null);
+  const [openToast, setOpenToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
+  const [severity, setSeverity] = useState("");
   const [searchParams, setSearchParams] = useSearchParams();
 
   const initialSearch = searchParams.get("q");
   const [searchBar, setSearchBar] = useState(initialSearch || "");
+
 
   useEffect(() => {
     let params = {}
@@ -67,14 +72,22 @@ function Navbar({ handleTrigger,section }) {
     setAnchorElUser(null);
   };
   const handleLogout = () => {
+
     localStorage.removeItem("token");
     localStorage.removeItem("userId");
     localStorage.removeItem("username");
-    navigate("/signin")
+    setToastMessage("Logout Success")
+    setSeverity("success")
+    setOpenToast(true)
+    setTimeout(() => {
+      navigate("/signin")
+    }, 1000)
+
+
   }
 
   const token = localStorage.getItem("token");
-  const username=localStorage.getItem("username");
+  const username = localStorage.getItem("username");
 
   return (
     <AppBar position="static">
@@ -111,8 +124,8 @@ function Navbar({ handleTrigger,section }) {
           <Box>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar sx={{color:"#138ef2"}} alt="Remy Sharp" >
-                  {username&&username[0].toUpperCase()}
+                <Avatar sx={{ color: "#138ef2" }} alt="Remy Sharp" >
+                  {username && username[0].toUpperCase()}
                 </Avatar>
               </IconButton>
             </Tooltip>
@@ -133,7 +146,7 @@ function Navbar({ handleTrigger,section }) {
               onClose={handleCloseUserMenu}
             >
               <MenuItem onClick={handleCloseUserMenu}>
-                <Typography textAlign="center" sx={{ textDecoration: 'none', color: 'black' }} onClick={() => {section==="My Blog"?navigate("/userblog"):navigate("/") }}>{section}</Typography>
+                <Typography textAlign="center" sx={{ textDecoration: 'none', color: 'black' }} onClick={() => { section === "My Blog" ? navigate("/userblog") : navigate("/") }}>{section}</Typography>
               </MenuItem>
               <MenuItem onClick={handleCloseUserMenu}><Typography textAlign="center" sx={{ textDecoration: 'none', color: 'black' }}>Profile</Typography>
               </MenuItem>
@@ -163,6 +176,7 @@ function Navbar({ handleTrigger,section }) {
           </Box>
         </Toolbar>
       </Container>
+      <Toast open={openToast} msg={toastMessage} severity={severity} setOpenToast={setOpenToast} setToastMessage={setToastMessage} />
     </AppBar >
   );
 }

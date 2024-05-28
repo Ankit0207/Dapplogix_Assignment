@@ -5,6 +5,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useDispatch } from 'react-redux';
 import { deleteComment, editComment } from '../Redux/Comments/action';
+import Toast from './Toast';
 
 const CommentComponent = ({ comment, handleCommentTrigger }) => {
     const dispatch = useDispatch();
@@ -14,6 +15,9 @@ const CommentComponent = ({ comment, handleCommentTrigger }) => {
     const [openEdit, setOpenEdit] = useState(false);
     const [openDelete, setOpenDelete] = useState(false);
     const [newCommentText, setNewCommentText] = useState(comment.comment);
+    const [openToast, setOpenToast] = React.useState(false);
+    const [toastMessage, setToastMessage] = React.useState("");
+    const [severity, setSeverity] = React.useState("");
 
     const handleEditOpen = () => {
         setOpenEdit(true);
@@ -32,14 +36,28 @@ const CommentComponent = ({ comment, handleCommentTrigger }) => {
     };
 
     const handleEditConfirm = () => {
-        dispatch(editComment(comment._id, newCommentText, token)).then(() => {
-            handleCommentTrigger();
-            handleEditClose();
-        })
+        if (newCommentText === "") {
+            setToastMessage("Comment is required.")
+            setSeverity("info")
+            setOpenToast(true);
+        } else {
+            dispatch(editComment(comment._id, newCommentText, token)).then(() => {
+                setToastMessage("Comment Edited.")
+                setSeverity("success")
+                setOpenToast(true);
+                handleCommentTrigger();
+                handleEditClose();
+            })
+        }
+
     };
 
     const handleDeleteConfirm = () => {
         dispatch(deleteComment(comment._id, token)).then(() => {
+            
+            setToastMessage("Comment Deleted.")
+            setSeverity("success")
+            setOpenToast(true);
             handleCommentTrigger();
             handleDeleteClose();
         })
@@ -120,6 +138,7 @@ const CommentComponent = ({ comment, handleCommentTrigger }) => {
                     <Button onClick={handleDeleteConfirm} color="error">Delete</Button>
                 </DialogActions>
             </Dialog>
+            <Toast open={openToast} msg={toastMessage} severity={severity} setOpenToast={setOpenToast} setToastMessage={setToastMessage} />
         </Card>
     );
 };
