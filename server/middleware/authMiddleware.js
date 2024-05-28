@@ -11,13 +11,13 @@ const authMiddleware = async (req, res, next) => {
                 req.userName = decoded.userName;
                 next();
             } else {
-                res.status(401).json({ msg: 'user is not authorized' });
+                return res.status(401).json({ msg: 'user is not authorized' });
             }
         } else {
-            res.status(401).json({ msg: 'login to continue' });
+            return res.status(401).json({ msg: 'login to continue' });
         }
     } catch (err) {
-        res.status(500).json({ error: err.message });
+       return res.status(500).json({ error: err.message });
     }
 }
 

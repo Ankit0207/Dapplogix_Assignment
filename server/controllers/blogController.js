@@ -5,7 +5,7 @@ const createBlog = async (req, res) => {
     const { title, content } = req.body;
     try {
         if (!title || !content) {
-            return res.status(401).json({ msg: 'Title and content are required fields.' });
+            return res.status(200).json({ msg: 'Title and content are required fields.' });
         }
         const newBlog = new BlogModel({
             ...req.body, authorId: req.userId,
@@ -120,7 +120,7 @@ const likeBlog = async (req, res) => {
         await blog.save();
         return res.status(200).json({ msg: 'Blog liked and disliked successfully', blog });
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        return res.status(500).json({ message: error.message });
     }
 };
 
