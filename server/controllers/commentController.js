@@ -1,7 +1,11 @@
 const { CommentModel } = require('../model/commentModel');
 
 const createComment = async (req, res) => {
+    const { comment } = req.body;
     try {
+        if (!comment) {
+            return res.status(200).json({ msg: 'comment required field.' });
+        }
         const newComment = new CommentModel({
             ...req.body,
             userId: req.userId,
@@ -32,7 +36,7 @@ const updateComment = async (req, res) => {
             return res.status(401).json({ message: 'Not authorized' });
         }
         const updatedComment = await CommentModel.findByIdAndUpdate({ _id: req.params.id }, req.body, { new: true });
-        return res.status(200).json({ msg: 'comment has been updated successfully', updatedComment});
+        return res.status(200).json({ msg: 'comment has been updated successfully', updatedComment });
     } catch (error) {
         return res.status(500).json({ message: error.message });
     }
