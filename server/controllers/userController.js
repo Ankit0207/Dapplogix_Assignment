@@ -8,7 +8,7 @@ const registerUser = async (req, res) => {
         const userExists = await UserModel.findOne({ email });
 
         if (userExists) {
-            return res.status(401).json({ message: 'User already exists' });
+            return res.status(200).json({ message: 'User already exists' });
         }
 
         bcrypt.hash(password, 10, async (err, hash) => {
@@ -38,11 +38,11 @@ const loginUser = async (req, res) => {
                     const token = jwt.sign({ userId: user._id, userName: user.username }, process.env.JwtSecretKey);
                     return res.status(200).json({ msg: 'login successful', token,user });
                 } else {
-                    return res.status(401).json({ msg: 'wrong credentials' });
+                    return res.status(200).json({ msg: 'wrong credentials' });
                 }
             });
         } else {
-            return res.status(401).json({ message: 'user not exist' });
+            return res.status(200).json({ message: 'user not exist' });
         }
     } catch (error) {
         return res.status(500).json({ message: error.message });
